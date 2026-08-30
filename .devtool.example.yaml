@@ -4,6 +4,7 @@ services:
   - name: backend
     workDir: ./backend
     healthUrl: http://localhost:8080/health
+    healthTimeoutSeconds: 45
     port: 8080
 
   - name: frontend

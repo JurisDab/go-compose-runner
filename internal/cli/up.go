@@ -38,7 +38,15 @@ func newUpCmd() *cobra.Command {
 			for line := range lines {
 				c := colorFor[line.Service]
 				prefix := c.Sprintf("[%s]", line.Service)
-				fmt.Printf("%s %s\n", prefix, line.Text)
+
+				switch {
+				case line.IsStatus && line.IsErr:
+					fmt.Printf("%s %s\n", prefix, color.New(color.FgRed, color.Bold).Sprint("✗ "+line.Text))
+				case line.IsStatus:
+					fmt.Printf("%s %s\n", prefix, color.New(color.FgGreen, color.Bold).Sprint("✓ "+line.Text))
+				default:
+					fmt.Printf("%s %s\n", prefix, line.Text)
+				}
 			}
 
 			return nil

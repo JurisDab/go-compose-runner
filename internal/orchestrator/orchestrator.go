@@ -10,20 +10,26 @@ import (
 	"io"
 	"os/exec"
 	"sync"
+	"time"
 
 	"github.com/JurisDab/devtool/internal/config"
+	"github.com/JurisDab/devtool/internal/healthcheck"
 )
 
 // LogLine is one line of output from one service, tagged for display.
 type LogLine struct {
-	Service string
-	Text    string
-	IsErr   bool
+	Service  string
+	Text     string
+	IsErr    bool
+	IsStatus bool // health-check result rather than raw compose output
 }
 
 // Up starts every service concurrently and streams their combined output
 // on the returned channel until the context is cancelled or all services
-// exit. The channel is closed once every service goroutine has finished.
+// exit. Services with a HealthURL are polled in the background and report
+// a status line once they're actually ready to receive traffic, rather than
+// just "container started." The channel is closed once every service and
+// health-check goroutine has finished.
 func Up(ctx context.Context, cfg *config.Config) (<-chan LogLine, error) {
 	lines := make(chan LogLine)
 
@@ -34,6 +40,14 @@ func Up(ctx context.Context, cfg *config.Config) (<-chan LogLine, error) {
 			defer wg.Done()
 			runCompose(ctx, svc, []string{"up"}, lines)
 		}(svc)
+
+		if svc.HealthURL != "" {
+			wg.Add(1)
+			go func(svc config.Service) {
+				defer wg.Done()
+				waitHealthy(ctx, svc, lines)
+			}(svc)
+		}
 	}
 
 	go func() {
@@ -42,6 +56,19 @@ func Up(ctx context.Context, cfg *config.Config) (<-chan LogLine, error) {
 	}()
 
 	return lines, nil
+}
+
+func waitHealthy(ctx context.Context, svc config.Service, out chan<- LogLine) {
+	timeout := time.Duration(svc.HealthTimeoutSeconds) * time.Second
+	if timeout <= 0 {
+		timeout = config.DefaultHealthTimeoutSeconds * time.Second
+	}
+
+	if err := healthcheck.Wait(ctx, svc.HealthURL, timeout); err != nil {
+		out <- LogLine{Service: svc.Name, Text: fmt.Sprintf("health check failed: %v", err), IsErr: true, IsStatus: true}
+		return
+	}
+	out <- LogLine{Service: svc.Name, Text: fmt.Sprintf("ready (%s)", svc.HealthURL), IsStatus: true}
 }
 
 // Down stops every service concurrently and waits for all of them to finish.

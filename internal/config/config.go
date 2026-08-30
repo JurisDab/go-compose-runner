@@ -9,12 +9,18 @@ import (
 
 // Service describes one compose-managed service that devtool orchestrates.
 type Service struct {
-	Name       string `yaml:"name"`
-	WorkDir    string `yaml:"workDir"`
-	HealthURL  string `yaml:"healthUrl,omitempty"`
-	Port       int    `yaml:"port,omitempty"`
-	StartAfter string `yaml:"startAfter,omitempty"`
+	Name                 string   `yaml:"name"`
+	WorkDir              string   `yaml:"workDir"`
+	HealthURL            string   `yaml:"healthUrl,omitempty"`
+	HealthTimeoutSeconds int      `yaml:"healthTimeoutSeconds,omitempty"`
+	Port                 int      `yaml:"port,omitempty"`
+	StartAfter           string   `yaml:"startAfter,omitempty"`
+	RequiredEnv          []string `yaml:"requiredEnv,omitempty"`
 }
+
+// DefaultHealthTimeoutSeconds is used when a service defines a HealthURL
+// but no explicit HealthTimeoutSeconds.
+const DefaultHealthTimeoutSeconds = 30
 
 // Config is the parsed .devtool.yaml for a project.
 type Config struct {

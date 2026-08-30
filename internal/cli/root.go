@@ -18,10 +18,13 @@ func NewRootCmd() *cobra.Command {
 	}
 
 	root.PersistentFlags().StringVarP(&configPath, "config", "c", ".devtool.yaml", "path to devtool config file")
+	root.SilenceUsage = true
+	root.SilenceErrors = true
 
 	root.AddCommand(newUpCmd())
 	root.AddCommand(newDownCmd())
 	root.AddCommand(newLogsCmd())
+	root.AddCommand(newDoctorCmd())
 
 	return root
 }
