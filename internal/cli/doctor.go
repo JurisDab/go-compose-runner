@@ -6,8 +6,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/JurisDab/devtool/internal/config"
-	"github.com/JurisDab/devtool/internal/doctor"
+	"github.com/JurisDab/go-compose-runner/internal/config"
+	"github.com/JurisDab/go-compose-runner/internal/doctor"
 )
 
 func newDoctorCmd() *cobra.Command {

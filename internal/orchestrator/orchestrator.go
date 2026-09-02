@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/JurisDab/devtool/internal/config"
-	"github.com/JurisDab/devtool/internal/healthcheck"
+	"github.com/JurisDab/go-compose-runner/internal/config"
+	"github.com/JurisDab/go-compose-runner/internal/healthcheck"
 )
 
 // LogLine is one line of output from one service, tagged for display.

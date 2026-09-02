@@ -1,6 +1,6 @@
-module github.com/JurisDab/devtool
+module github.com/JurisDab/go-compose-runner
 
-go 1.27.0
+go 1.25.0
 
 require (
 	github.com/fatih/color v1.19.0

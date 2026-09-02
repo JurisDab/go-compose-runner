@@ -1,0 +1,17 @@
+const http = require("http");
+
+const port = process.env.PORT || {{.Port}};
+
+const server = http.createServer((req, res) => {
+  if (req.url === "/health") {
+    res.writeHead(200);
+    res.end("ok");
+    return;
+  }
+  res.writeHead(200);
+  res.end("{{.Name}} is running");
+});
+
+server.listen(port, () => {
+  console.log(`{{.Name}} listening on :${port}`);
+});

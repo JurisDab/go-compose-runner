@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"strconv"
 
-	"github.com/JurisDab/devtool/internal/config"
+	"github.com/JurisDab/go-compose-runner/internal/config"
 )
 
 // Check is the result of one pre-flight check.

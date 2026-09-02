@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/JurisDab/devtool/internal/config"
+	"github.com/JurisDab/go-compose-runner/internal/config"
 )
 
 func TestCheckWorkDir(t *testing.T) {

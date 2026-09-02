@@ -3,8 +3,8 @@ package cli
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/JurisDab/devtool/internal/config"
-	"github.com/JurisDab/devtool/internal/orchestrator"
+	"github.com/JurisDab/go-compose-runner/internal/config"
+	"github.com/JurisDab/go-compose-runner/internal/orchestrator"
 )
 
 func newDownCmd() *cobra.Command {

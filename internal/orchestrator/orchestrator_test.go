@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/JurisDab/devtool/internal/config"
+	"github.com/JurisDab/go-compose-runner/internal/config"
 )
 
 func TestLogs_UnknownServiceName(t *testing.T) {
