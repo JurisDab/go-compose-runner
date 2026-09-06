@@ -1,6 +1,3 @@
-// Package scaffold generates a new service directory from a template
-// bundled into the devtool binary via embed.FS, so `devtool new` works
-// with no external template files on disk.
 package scaffold
 
 import (
@@ -20,13 +17,11 @@ var templatesFS embed.FS
 
 const templatesRoot = "templates"
 
-// Data fills in the placeholders inside template files.
 type Data struct {
 	Name string
 	Port int
 }
 
-// List returns the available template names, sorted alphabetically.
 func List() ([]string, error) {
 	entries, err := fs.ReadDir(templatesFS, templatesRoot)
 	if err != nil {
@@ -43,12 +38,7 @@ func List() ([]string, error) {
 	return names, nil
 }
 
-// Generate renders the named template into destDir, which must not already
-// exist. Files ending in .tmpl are rendered with text/template and have the
-// suffix stripped; every other file is copied verbatim.
 func Generate(templateName, destDir string, data Data) error {
-	// embed.FS paths are always slash-separated (like path.Join), regardless
-	// of host OS, so they must not be built with filepath.Join on Windows.
 	srcRoot := path.Join(templatesRoot, templateName)
 	if _, err := fs.Stat(templatesFS, srcRoot); err != nil {
 		names, _ := List()

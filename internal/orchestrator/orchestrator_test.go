@@ -30,8 +30,6 @@ func TestLogs_NoFilterStartsAllServices(t *testing.T) {
 		},
 	}
 
-	// A short-lived context ensures any docker processes this spins up get
-	// killed via exec.CommandContext instead of leaking past the test.
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 
@@ -44,7 +42,5 @@ func TestLogs_NoFilterStartsAllServices(t *testing.T) {
 	}
 
 	for range lines {
-		// Drain until the context timeout stops every service goroutine
-		// and the channel closes.
 	}
 }

@@ -37,7 +37,6 @@ func TestCheckWorkDir(t *testing.T) {
 
 func TestCheckPortFree(t *testing.T) {
 	t.Run("free port", func(t *testing.T) {
-		// Ask the OS for a currently-unused port, then release it immediately.
 		ln, err := net.Listen("tcp", "localhost:0")
 		if err != nil {
 			t.Fatal(err)
@@ -92,13 +91,12 @@ func TestRun_ChecksEveryService(t *testing.T) {
 		Project: "demo",
 		Services: []config.Service{
 			{Name: "a", WorkDir: dir},
-			{Name: "b", WorkDir: dir, Port: 1}, // port 1 requires privileges; expected to read as unavailable or free depending on OS, just exercise the path
+			{Name: "b", WorkDir: dir, Port: 1},
 		},
 	}
 
 	checks := Run(cfg)
 
-	// The 3 global docker checks, plus 2 workDir checks, plus 1 port check.
 	wantLen := 3 + 2 + 1
 	if len(checks) != wantLen {
 		t.Fatalf("Run() returned %d checks, want %d: %+v", len(checks), wantLen, checks)

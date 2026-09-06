@@ -1,4 +1,3 @@
-// Package cli wires up devtool's Cobra command tree.
 package cli
 
 import (
@@ -7,7 +6,6 @@ import (
 
 var configPath string
 
-// NewRootCmd builds the devtool root command with all subcommands attached.
 func NewRootCmd() *cobra.Command {
 	root := &cobra.Command{
 		Use:   "devtool",

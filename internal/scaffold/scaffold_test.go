@@ -29,7 +29,7 @@ func TestGenerate(t *testing.T) {
 		template     string
 		wantErr      bool
 		wantFiles    []string
-		wantContains map[string]string // file -> substring it must contain after rendering
+		wantContains map[string]string
 	}{
 		{
 			name:     "go-service",

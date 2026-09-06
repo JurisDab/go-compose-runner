@@ -1,6 +1,3 @@
-// Package orchestrator starts, stops, and streams logs for the services
-// defined in a devtool config, running each service's docker compose
-// commands concurrently and fanning their output into one stream.
 package orchestrator
 
 import (
@@ -16,20 +13,13 @@ import (
 	"github.com/JurisDab/go-compose-runner/internal/healthcheck"
 )
 
-// LogLine is one line of output from one service, tagged for display.
 type LogLine struct {
 	Service  string
 	Text     string
 	IsErr    bool
-	IsStatus bool // health-check result rather than raw compose output
+	IsStatus bool
 }
 
-// Up starts every service concurrently and streams their combined output
-// on the returned channel until the context is cancelled or all services
-// exit. Services with a HealthURL are polled in the background and report
-// a status line once they're actually ready to receive traffic, rather than
-// just "container started." The channel is closed once every service and
-// health-check goroutine has finished.
 func Up(ctx context.Context, cfg *config.Config) (<-chan LogLine, error) {
 	lines := make(chan LogLine)
 
@@ -71,7 +61,6 @@ func waitHealthy(ctx context.Context, svc config.Service, out chan<- LogLine) {
 	out <- LogLine{Service: svc.Name, Text: fmt.Sprintf("ready (%s)", svc.HealthURL), IsStatus: true}
 }
 
-// Down stops every service concurrently and waits for all of them to finish.
 func Down(ctx context.Context, cfg *config.Config) error {
 	lines := make(chan LogLine)
 	var wg sync.WaitGroup
@@ -95,8 +84,6 @@ func Down(ctx context.Context, cfg *config.Config) error {
 	return nil
 }
 
-// Logs tails logs for the given services (or all services in cfg if
-// names is empty), fanning them into one channel until ctx is cancelled.
 func Logs(ctx context.Context, cfg *config.Config, names []string) (<-chan LogLine, error) {
 	services := cfg.Services
 	if len(names) > 0 {

@@ -7,7 +7,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Service describes one compose-managed service that devtool orchestrates.
 type Service struct {
 	Name                 string   `yaml:"name"`
 	WorkDir              string   `yaml:"workDir"`
@@ -18,17 +17,13 @@ type Service struct {
 	RequiredEnv          []string `yaml:"requiredEnv,omitempty"`
 }
 
-// DefaultHealthTimeoutSeconds is used when a service defines a HealthURL
-// but no explicit HealthTimeoutSeconds.
 const DefaultHealthTimeoutSeconds = 30
 
-// Config is the parsed .devtool.yaml for a project.
 type Config struct {
 	Project  string    `yaml:"project"`
 	Services []Service `yaml:"services"`
 }
 
-// Load reads and parses a .devtool.yaml file from the given path.
 func Load(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

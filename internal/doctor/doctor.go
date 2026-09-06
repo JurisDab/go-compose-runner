@@ -1,6 +1,3 @@
-// Package doctor runs pre-flight checks against the local dev environment
-// so problems (Docker not running, a port already taken, a missing env
-// var) surface immediately instead of as a confusing failure mid-startup.
 package doctor
 
 import (
@@ -13,14 +10,12 @@ import (
 	"github.com/JurisDab/go-compose-runner/internal/config"
 )
 
-// Check is the result of one pre-flight check.
 type Check struct {
 	Name   string
 	OK     bool
 	Detail string
 }
 
-// Run executes every check and returns the results in a stable order.
 func Run(cfg *config.Config) []Check {
 	var checks []Check
 

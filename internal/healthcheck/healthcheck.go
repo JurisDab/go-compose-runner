@@ -1,6 +1,3 @@
-// Package healthcheck polls an HTTP endpoint until it responds successfully
-// or a timeout/cancellation gives up, so devtool can report a service as
-// "ready" instead of just "container started."
 package healthcheck
 
 import (
@@ -12,9 +9,6 @@ import (
 
 const pollInterval = 500 * time.Millisecond
 
-// Wait polls url every pollInterval until it returns a 2xx status, ctx is
-// cancelled, or timeout elapses. It returns nil as soon as the endpoint
-// responds successfully.
 func Wait(ctx context.Context, url string, timeout time.Duration) error {
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
